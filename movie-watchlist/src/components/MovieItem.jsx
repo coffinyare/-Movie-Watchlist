@@ -6,7 +6,7 @@ function MovieItem({ handleToggle, handleDelete, list }) {
           checked={list.completed} 
           onChange={( )=> handleToggle(list.id)} />   
           {list.name}
-          <button onClick={()=>handleDelete(list.id)}>Delete</button>
+          <button onClick={()=>handleDelete(list.id)}>🗑️</button>
           </p>
   )
 
