@@ -1,284 +1,128 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
+import  MovieItem from "./components/MovieItem";
+import FilterButtons from "./components/FilterButtons";
+import SearchBar from "./components/SearchBar";
+import AddMovie from "./components/AddMovie";
 import "./App.css";
 
 function App() {
-
-  // =========================
-  // STATES
-  // =========================
-
-  const [name, setName] = useState("");
-
-  const [lists, setLists] = useState(() => {
-    const savedMovies = localStorage.getItem("movies");
-
-    if (savedMovies) {
-      return JSON.parse(savedMovies);
-    }
-
-    return [
-      {
-        id: 1,
-        name: "prison break",
-        completed: true,
-      },
-      {
-        id: 2,
-        name: "daha 17",
-        completed: false,
-      },
-    ];
-  });
-
-  const [filter, setFilter] = useState("all");
-
-  const [search, setSearch] = useState("");
+  const[name, setName]=useState("")
+  const[search, setSearch] = useState("")
+  const[filter, setFilter] = useState("all")
+ const [lists, setLists] = useState(() => {
+     const savedMovies = localStorage.getItem("movies");
+ 
+     if (savedMovies) {
+       return JSON.parse(savedMovies);
+     }
+ 
+     return [
+       {
+         id: 1,
+         name: "prison break",
+         completed: true,
+       },
+       {
+         id: 2,
+         name: "daha 17",
+         completed: false,
+       },
+     ];
+   });
 
 
-  // =========================
-  // HANDLE CHANGE
-  // =========================
+    useEffect(() => {
+      localStorage.setItem(
+        "movies",
+        JSON.stringify(lists)
+      );
+    }, [lists]);
 
-  function handleChange(event) {
-    const newname = event.target.value;
 
-    setName(newname);
+  
+
+  
+
+  function handleChange(event){
+    const newName= event.target.value
+    setName(newName)
   }
 
-
-  // =========================
-  // ADD MOVIE
-  // =========================
-
-  function handleAdd(event) {
+  function handleAdd(event){
     event.preventDefault();
-
-    setLists((prevList) => {
-      return [
-        ...prevList,
-        {
-          id: lists.length + 1,
+    if(name.trim()=== ""){
+      return;
+    }
+    setLists((prevLists)=>{
+      return[
+        ...prevLists,{
+          id: Date.now(),
           name: name,
           completed: false,
-        },
-      ];
-    });
-
-    setName("");
+        }
+      ]
+      
+    })
+    setName("")
   }
 
-
-  // =========================
-  // TOGGLE MOVIE
-  // =========================
-
-  function handleToggle(id) {
-    setLists((prevList) => {
-      return prevList.map((list) => {
-
-        if (list.id === id) {
-          return {
+  function handleToggle(id){
+    setLists((prevLits)=>{
+      return prevLits.map((list)=>{
+        if (list.id === id){
+          return{
             ...list,
             completed: !list.completed,
-          };
+          }
         }
-
         return list;
-      });
-    });
+      })
+    })
   }
-
-
-  // =========================
-  // DELETE MOVIE
-  // =========================
-
-  function handleDelete(id) {
-    setLists((prevList) => {
-      return prevList.filter((list) => {
+  function handleDelete(id){
+    setLists((prevLists)=>{
+      return prevLists.filter((list)=>{
         return list.id !== id;
-      });
-    });
+      })
+    })
   }
 
-
-  // =========================
-  // LOCAL STORAGE
-  // =========================
-
-  useEffect(() => {
-    localStorage.setItem(
-      "movies",
-      JSON.stringify(lists)
-    );
-  }, [lists]);
-
-
-  // =========================
-  // FILTER + SEARCH
-  // =========================
-
-  const filteredMovies = lists.filter((movie) => {
-
-    const matchesSearch = movie.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    if (filter === "all") {
-      return matchesSearch;
+  const filteredLists = lists.filter((list) => {
+    const searchMovie= list.name.toLowerCase().includes(search.toLowerCase());
+    if(filter === "all"){
+      return searchMovie;
     }
-
-    if (filter === "watched") {
-      return movie.completed === true && matchesSearch;
+    if(filter === "watched"){
+      return list.completed && searchMovie;
     }
-
-    if (filter === "unwatched") {
-      return movie.completed === false && matchesSearch;
+    if(filter === "unwatched"){
+      return !list.completed && searchMovie;
     }
+    return searchMovie;
 
-    return matchesSearch;
-  });
-
-
-  // =========================
-  // COUNTS
-  // =========================
-
-  const watchedCount = lists.filter((movie) => {
-    return movie.completed === true;
-  }).length;
-
-  const unWatchedCount = lists.filter((movie) => {
-    return movie.completed === false;
-  }).length;
-
-  const allCount = lists.length;
-
-
-  // =========================
-  // WEBSITE
-  // =========================
-
-  return (
-    <div className="app">
+  })
+  return(
+    <>
 
       <h1>🎬 Movie Watchlist</h1>
-
-
-      {/* SEARCH */}
-
-      <input
-        className="search"
-        type="text"
-        placeholder="Search movie..."
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-      />
-
-
-      {/* FILTERS */}
-
-      <div className="filters">
-
-        <button
-          type="button"
-          onClick={() => setFilter("all")}
-        >
-          All ({allCount})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilter("watched")}
-        >
-          Watched ({watchedCount})
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setFilter("unwatched")}
-        >
-          Unwatched ({unWatchedCount})
-        </button>
-
-      </div>
-
-
-      {/* ADD MOVIE */}
-
-      <form
-        className="add-form"
-        onSubmit={handleAdd}
-      >
-
-        <input
-          type="text"
-          placeholder="Enter movie name..."
-          value={name}
-          onChange={handleChange}
+       <FilterButtons
+         filter={filter}
+         setFilter={setFilter}
         />
+      <SearchBar
+        search={search}
+        setSearch={setSearch}
+       />
+       <AddMovie 
+        handleAdd={handleAdd}
+        name={name}
+        handleChange={handleChange}
+       />
 
-        <button type="submit">
-          Add
-        </button>
-
-      </form>
-
-
-      {/* MOVIE LIST */}
-
-      <div className="movie-list">
-
-        {filteredMovies.map((movie) => {
-
-          return (
-            <div
-              className="movie"
-              key={movie.id}
-            >
-
-              <label>
-
-                <input
-                  type="checkbox"
-                  checked={movie.completed}
-                  onChange={() =>
-                    handleToggle(movie.id)
-                  }
-                />
-
-                <span
-                  className={
-                    movie.completed
-                      ? "completed"
-                      : ""
-                  }
-                >
-                  {movie.name}
-                </span>
-
-              </label>
-
-
-              <button
-                className="delete"
-                type="button"
-                onClick={() =>
-                  handleDelete(movie.id)
-                }
-              >
-                Delete
-              </button>
-
-            </div>
-          );
-
-        })}
-
-      </div>
-
-    </div>
-  );
+      {filteredLists.map((list)=>{
+        return <MovieItem key={list.id} list={list} handleToggle={handleToggle} handleDelete={handleDelete} />;
+      })}
+    </>
+)  
 }
-
 export default App;

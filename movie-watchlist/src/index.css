@@ -1,78 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f2f4f7;
-}
-
-#root {
-  display: flex;
-  justify-content: center;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-form {
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 500px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Search and movie name inputs */
-input[type="text"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin: 5px;
-  font-size: 15px;
-}
-
-input[type="text"]:focus {
-  outline: none;
-  border-color: #555;
-}
-
-/* Buttons */
-button {
-  padding: 9px 14px;
-  margin: 5px;
-  border: none;
-  border-radius: 6px;
-  background-color: #333;
+  background: #111827;
   color: white;
-  cursor: pointer;
-  font-size: 14px;
 }
 
-button:hover {
-  background-color: #555;
-}
-
-/* Movie list */
-p {
-  background-color: white;
-  padding: 12px;
-  margin: 10px 0;
-  width: 500px;
-  border-radius: 7px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-input[type="checkbox"] {
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-/* Delete button */
-button[type="delete"] {
-  float: right;
-  background-color: #d9534f;
-}
-
-button[type="delete"]:hover {
-  background-color: #c9302c;
+button,
+input {
+  font-family: inherit;
 }
